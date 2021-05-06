@@ -1,0 +1,105 @@
+package pe.com.sedapal.seguridad.core.bean;
+
+public class ContratistaBean extends Auditoria{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private Integer idContratista;
+	private String desRazon;
+	private String desRazonCorta;
+	private String direccion;
+	private Integer codDocRazon;
+	private String nroDocRazon;
+	private String desRepresentante;
+	private Integer codDocRepresentante;
+	private String nroDocRepresentante;
+	private String correo;
+	private String telefono;
+	
+//	Auditoria
+	private String codEstado;
+	private String desEstado;
+	
+	public Integer getIdContratista() {
+		return idContratista;
+	}
+	public void setIdContratista(Integer idContratista) {
+		this.idContratista = idContratista;
+	}
+	public String getDesRazon() {
+		return desRazon;
+	}
+	public void setDesRazon(String desRazon) {
+		this.desRazon = desRazon;
+	}
+	public String getDesRazonCorta() {
+		return desRazonCorta;
+	}
+	public void setDesRazonCorta(String desRazonCorta) {
+		this.desRazonCorta = desRazonCorta;
+	}
+	public Integer getCodDocRazon() {
+		return codDocRazon;
+	}
+	public void setCodDocRazon(Integer codDocRazon) {
+		this.codDocRazon = codDocRazon;
+	}
+	public String getNroDocRazon() {
+		return nroDocRazon;
+	}
+	public void setNroDocRazon(String nroDocRazon) {
+		this.nroDocRazon = nroDocRazon;
+	}
+	public String getDesRepresentante() {
+		return desRepresentante;
+	}
+	public void setDesRepresentante(String desRepresentante) {
+		this.desRepresentante = desRepresentante;
+	}
+	public Integer getCodDocRepresentante() {
+		return codDocRepresentante;
+	}
+	public void setCodDocRepresentante(Integer codDocRepresentante) {
+		this.codDocRepresentante = codDocRepresentante;
+	}
+	public String getNroDocRepresentante() {
+		return nroDocRepresentante;
+	}
+	public void setNroDocRepresentante(String nroDocRepresentante) {
+		this.nroDocRepresentante = nroDocRepresentante;
+	}
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	public String getTelefono() {
+		return telefono;
+	}
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+	public String getCodEstado() {
+		return codEstado;
+	}
+	public void setCodEstado(String codEstado) {
+		this.codEstado = codEstado;
+	}
+	public String getDesEstado() {
+		return desEstado;
+	}
+	public void setDesEstado(String desEstado) {
+		this.desEstado = desEstado;
+	}
+	public String getDireccion() {
+		return direccion;
+	}
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+}

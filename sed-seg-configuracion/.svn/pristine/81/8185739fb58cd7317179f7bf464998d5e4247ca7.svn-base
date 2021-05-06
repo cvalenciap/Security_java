@@ -1,0 +1,7 @@
+url=jdbc\:oracle\:thin\:@MANPOWER-ADES\:1521\/XE
+nombreUsuario=S_GUIA
+clave=S_GUIA
+driverClassName=oracle.jdbc.OracleDriver
+hibernate.connection.provider_class=com.jolbox.bonecp.provider.BoneCPConnectionProvider
+hibernate.connection.driver_class=oracle.jdbc.OracleDriver
+hibernate.dialect=org.hibernate.dialect.OracleDialect

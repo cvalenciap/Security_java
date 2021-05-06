@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- #Proyecto: Nuevo Sistema de Seguridad de Sedapal. #Fecha Creación: 27/12/2016. 
+	#Autor: Luis Castro Valdez. #Empresa: Tgestiona. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
+
+	xmlns:p="http://www.springframework.org/schema/p"
+
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/tx
+                http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/context 
+                http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                http://www.springframework.org/schema/aop 
+                http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                http://www.springframework.org/schema/util 
+                http://www.springframework.org/schema/util/spring-util-3.0.xsd
+               http://www.springframework.org/schema/task 
+               http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<context:property-placeholder
+		location="classpath:pe/com/sedapal/seguridad/configuracion/database.properties" />
+
+	<util:properties id="database"
+		location="classpath:pe/com/sedapal/seguridad/configuracion/database.properties" />
+		
+<!-- 	inicio adecuacion seguridad2		 -->
+	<context:property-placeholder location="classpath:application.properties"/>
+	
+	<util:properties id="configuration"
+		location="classpath:application.properties" />
+
+  <!-- redis template definition -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+	    p:connection-factory-ref="redisConnectionFactory"/>		
+<!-- 	fin adecuacion seguridad2 -->
+
+	<util:properties id="databaseobjects"
+		location="classpath:pe/com/sedapal/seguridad/configuracion/databaseobjects.properties" />
+
+	<context:property-placeholder
+		properties-ref="databaseobjects" />
+
+
+	<context:component-scan base-package="pe.com.sedapal.seguridad.core" />
+
+
+	<aop:aspectj-autoproxy />
+	<aop:config proxy-target-class="true" />
+
+	<aop:config>
+		<aop:advisor
+			pointcut="execution(* pe.com.sedapal.seguridad.core.service.SeguridadService.*(..))"
+			advice-ref="tx-advice" />
+	</aop:config>
+
+	<tx:advice id="tx-advice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- <tx:method name="guardar*" isolation="READ_COMMITTED" propagation="REQUIRED" 
+				rollback-for="Exception" /> -->
+			<tx:method name="obtener*" propagation="REQUIRED"
+				rollback-for="Exception" /><!-- <tx:method name="get*" propagation="REQUIRED" 
+				rollback-for="Exception" /> -->
+			<tx:method name="grabar*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="mantenimiento*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="actualizar*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			
+			<tx:method name="autenticacion*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			
+
+			<tx:method name="bloqueo*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+
+			<tx:method name="attemptAuthentication*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+
+			<tx:method name="loadUserByUsername*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+
+			<tx:method name="onAuthenticationSuccess*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="ejecutar*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="actualizar*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="olvidar*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="Exception" />
+
+			<!-- <tx:method name="update*" isolation="READ_COMMITTED" propagation="REQUIRED" 
+				rollback-for="Exception" /> <tx:method name="procesar*" isolation="READ_COMMITTED" 
+				propagation="REQUIRED" rollback-for="Exception" /> <tx:method name="executar*" 
+				isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception" 
+				/> -->
+
+		</tx:attributes>
+	</tx:advice>
+
+
+
+	<import
+		resource="classpath:pe/com/sedapal/seguridad/core/config/applicationContext-dao.xml" />
+
+	<import
+		resource="classpath:pe/com/sedapal/seguridad/core/config/applicationContext-datasource.xml" />
+
+	<bean id="seguridadTimer" class="pe.com.sedapal.seguridad.core.cron.SeguridadTimer"></bean>
+
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="seguridadTimer" method="ejecutarProcesos"
+			cron="00 01 01 * * *"></task:scheduled>
+	</task:scheduled-tasks>
+ 
+	
+
+
+
+</beans>

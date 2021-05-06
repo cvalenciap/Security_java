@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+	xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+	xsi:schemaLocation="	
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd    
+         http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd    
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://jax-ws.dev.java.net/spring/core
+   http://jax-ws.dev.java.net/spring/core.xsd
+   http://jax-ws.dev.java.net/spring/servlet
+   http://jax-ws.dev.java.net/spring/servlet.xsd">
+
+	<wss:binding url="/seguridadws">
+		<wss:service>
+			<ws:service bean="#seguridadws" />
+		</wss:service>
+	</wss:binding>
+
+
+	<!-- Web service methods -->
+	<bean id="seguridadws" class="pe.com.sedapal.seguridad.ws.SeguridadWsImpl" />
+	
+	<wss:binding url="/powerws">
+		<wss:service>
+			<ws:service bean="#powerws" />
+		</wss:service>
+	</wss:binding>
+
+
+	<!-- Web service methods -->
+	<bean id="powerws" class="pe.com.sedapal.seguridad.ws.PowerWsImpl" />
+	
+	
+
+	<import
+		resource="classpath:/pe/com/sedapal/seguridad/core/config/applicationContext-service.xml" />
+
+	<context:annotation-config />
+
+	<context:component-scan base-package="pe.com.sedapal.seguridad" />
+
+	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
+		<property name="soapVersion">
+			<util:constant static-field="org.springframework.ws.soap.SoapVersion.SOAP_12" />
+		</property>
+	</bean>
+
+</beans>

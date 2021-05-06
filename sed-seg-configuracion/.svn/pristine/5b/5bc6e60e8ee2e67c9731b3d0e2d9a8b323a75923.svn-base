@@ -1,0 +1,10 @@
+#url=jdbc\:oracle\:thin\:@192.168.110.22\:1610\/DBAPLIC
+#url=jdbc\:oracle\:thin\:@10.100.120.134\:1525\/dbaplic
+#url=jdbc\:oracle\:thin\:@1.48.1.137\:1610\/dbaplic
+url=jdbc\:oracle\:thin\:@scandesa.sedapal.com.pe\:1521\/DEVDBAPLIC
+nombreUsuario=s_guia
+clave=desarrollo
+driverClassName=oracle.jdbc.OracleDriver
+hibernate.connection.provider_class=com.jolbox.bonecp.provider.BoneCPConnectionProvider
+hibernate.connection.driver_class=oracle.jdbc.OracleDriver
+hibernate.dialect=org.hibernate.dialect.OracleDialect

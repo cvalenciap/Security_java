@@ -1,0 +1,18 @@
+#PARAMETROS CONEXION LDAP
+ldap.host.name=srvatar01.sedapal.com.pe
+ldap.host=1.1.6.50
+ldap.port=389
+
+ldap.loginDN.generic=cn=prueba1,ou=ETIC,ou=GDI,dc=sedapal,dc=corp
+ldap.user.generic=prueba1
+ldap.password.generic=Sedapal1
+
+ldap.base=dc=sedapal,dc=corp
+
+#CONFIGURACION REDIS
+spring.redis.host=1.1.192.15
+spring.redis.host.name=sedapal.test
+spring.redis.port=6379
+
+parametro.token.jwtSecret=P@ssw0rd
+parametro.token.jwtExpiration=120

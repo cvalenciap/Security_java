@@ -1,0 +1,6 @@
+pe\com\sedapal\seguridad\ws\service\IntegracionService.class
+pe\com\sedapal\seguridad\ws\PowerWs.class
+pe\com\sedapal\seguridad\ws\SeguridadWs.class
+pe\com\sedapal\seguridad\ws\PowerWsImpl.class
+pe\com\sedapal\seguridad\ws\SeguridadWsImpl.class
+pe\com\sedapal\seguridad\ws\service\impl\IntegracionServiceImpl.class

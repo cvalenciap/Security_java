@@ -1,0 +1,41 @@
+NotEmpty.aplicacionForm.des = Campo descripción larga es requerido!
+NotEmpty.aplicacionForm.dcorta = Campo descripción corta es requerido!
+NotEmpty.aplicacionForm.nemonico = Campo Nemonico es requerido!
+NotEmpty.aplicacionForm.flag = Campo estado es requerido!
+NotEmpty.aplicacionForm.email = Email is required!
+NotEmpty.aplicacionForm.address = Address is required!
+NotEmpty.aplicacionForm.password = Password is required!
+NotEmpty.aplicacionForm.confirmPassword = Confirm password is required!
+NotEmpty.aplicacionForm.sex = Sex is required!
+NotEmpty.aplicacionForm.number = Number is required!
+NotEmpty.aplicacionForm.country = Country is required!
+Valid.aplicacionForm.framework = Please select at least two frameworks!
+Valid.aplicacionForm.skill = Please select at least three skills!
+Diff.aplicacionForm.confirmPassword = Passwords do not match, please retype!
+Pattern.aplicacionForm.email = Invalid Email format!	
+
+NotEmpty.inputForm.field= campo obligatorio.
+NotEmpty.inputForm.list= seleccion obligatoria.
+NotEmpty.inputForm.textmax =  Se ha excedido el número máximo de caracteres permitidos.
+
+NotEmpty.inputForm.trabajador.email= El trabajador seleccionado no tiene asociado un correo electrónico.
+Invalid.inputForm.trabajador= Ficha de trabajador inválida.
+
+NotEmpty.usuario = Campo usuario es requerido!	
+NotEmpty.clave = Campo Clave es requerido!
+
+NotEmpty.abreviatura.sistema = La abreviatura ya es utilizada por otro sistema.
+NotEmpty.usuario.existe = El código de usuario ya existe
+
+NotEmpty.inputForm.vdoc= El nombre completo del archivo de no debe exceder a 50 caracteres.
+NotEmpty.inputForm.idUsuario= El código de usuario no debe exceder a 15 caracteres.
+
+NotEmpty.inputForm.modulodupli =  El módulo ingresado ya existe.
+
+NotEmpty.inputForm.acciones =  Debe elegir al menos una acción.
+
+NoEmpty.inputForm.nombreExterno=Debe ingresar el Nombre y Apellido del Trabajador Externo.
+NoEmpty.inputForm.dniExterno=Debe ingresar el Nro. de DNI del Trabajador Externo.
+NoEmpty.inputForm.emailExterno=Debe ingresar el correo electrónico del Trabajador Externo.
+Invalid.inputForm.email=El correo ingresado es inválido.
+NotEmpty.dniExterno.existe=Documento de Identidad ya se encuentra registrado para el Contratista.

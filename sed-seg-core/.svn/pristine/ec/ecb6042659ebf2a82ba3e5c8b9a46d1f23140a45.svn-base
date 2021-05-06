@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.UsuarioPerfilSistemaMBDAO">
+   	    	    
+   	<resultMap id="UsuarioPerfilMap" type="UsuarioPerfilBean">
+   		<result property="codPerfil"			column="NCODPERFIL"/>
+ 		<result property="codSistema"				column="NCODSISTEMA"/>
+ 		<result property="codUsuario"				column="VCODUSUARIO"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="perfilNombre"				column="VPERFILNOMBRE"/>
+ 		<result property="sistemaNombre"				column="VSISTEMANOMBRE"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="codFicha"				column="NCODFICHA"/>
+ 		<result property="codArea"				column="NCODAREA"/>
+ 		<result property="usuarioCreacion"				column="VRESCRE"/>
+ 		<result property="fechaCreacion"				column="DFECCRE"/>
+ 		<result property="usuarioModificacion"				column="VRESACT"/>
+ 		<result property="fechaModificacion"				column="DFECACT"/>
+<!--  		inicio adecuacion seguridad2 -->
+		<result property="abreviaturaSistema"				column="VABREVIATURA"/>
+<!-- 		fin adecuacion seguridad2 -->
+    </resultMap>
+    
+    <resultMap id="UsuarioSistemaMap" type="UsuarioSistemaBean">
+   		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="codUsuario"				column="VCODUSUARIO"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="sistemaNombre"				column="VSISTEMANOMBRE"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="codFicha"				column="NCODFICHA"/>
+ 		<result property="codArea"				column="NCODAREA"/>
+ 		<result property="estadoNombre"				column="VESTADONOMBRE"/>
+ 		<result property="areaDescripcion"				column="AREA"/>
+ 		<result property="areaAbreviatura"				column="AREAABREV"/>
+ 		<result property="codAreaTrabajador"				column="AREATRAB"/>
+ 		<result property="nombrePerfil"				column="NOMBREPERFIL"/>
+ 		<result property="estadoTrabajador"				column="ESTTRAB"/>
+ 		<result property="correo"				column="VDIRELECTRONICA"/>
+    </resultMap>
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioPerfilMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioPerfilSistema" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUA_PERF_SIST(?) }
+	</select>
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioSistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioSistema" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_SISTEMA(?) }
+	</select>
+	
+	<parameterMap id="parametrosUsuario" type="java.util.Map">
+		<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioPerfilMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioPerfilSistemaPorUsuario" statementType="CALLABLE" parameterMap="parametrosUsuario" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUA_PERF_SIST_USU(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosCodigo" type="java.util.Map">
+		<parameter property="codPerfil"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioPerfilMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioPerfilSistemaPorCodigo" statementType="CALLABLE" parameterMap="parametrosCodigo" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUA_PERF_SIST_USU(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosUserCodigo" type="java.util.Map">
+		<parameter property="codPerfil"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioPerfilMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerUsuarioPerfilSistemaPorCodigo" statementType="CALLABLE" parameterMap="parametrosUserCodigo" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUA_PERF_SIST_COD(?,?,?,?) }
+	</select>
+	
+	<insert id="grabarUsuarioPerfilSistema" parameterType="usuarioPerfilBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD.SP_NUEVO_USUA_PERF_SIST(
+        	#{codPerfil}
+		    ,#{codSistema}
+		    ,#{codUsuario}
+		    ,#{estado}
+		    ,#{usuarioCreacion}
+        ) }
+    </insert>
+	
+	<update id="actualizarUsuarioPerfilSistema" parameterType="usuarioPerfilBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_USUA_PERF_SIST(
+			#{codPerfil}
+		    ,#{codSistema}
+		    ,#{codUsuario}
+		    ,#{estado}
+		    ,#{usuarioModificacion}
+		)}
+    </update>
+	
+	<update id="actualizarEstadoUsuarioPerfilSistema" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_USUA_PERF_SIST_EST(
+			#{codPerfil}
+		    ,#{codSistema}
+		    ,#{codUsuario}
+		    ,#{estado}
+		    ,#{usuario}
+		)}
+    </update>
+    
+    <parameterMap id="parametrosPagina" type="java.util.Map">
+    	<parameter property="valueSearch"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="P_TotalReg"  jdbcType="NUMERIC"	javaType="java.lang.Integer"	mode="OUT"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioSistemaPaginarTotal" statementType="CALLABLE" parameterMap="parametrosPagina" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_PERFIL_TOT(?,?) }
+	</select>
+    
+	<parameterMap id="parametrosPaginar" type="java.util.Map">
+    	<parameter property="pageSize"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="pageIndex"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="valueSearch"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="sortColumn"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioSistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioSistemaPaginar" statementType="CALLABLE" parameterMap="parametrosPaginar" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_PERFIL_PAG(?,?,?,?,?) }
+	</select>
+	
+<!-- 	inicio adecuacion seguridad2 -->
+	<select id="obtenerListadoUsuarioSistemaPaginarTotalAct" statementType="CALLABLE" parameterMap="parametrosPagina" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUARIO_PERFIL_TOT(?,?) }
+	</select>
+	
+	<select id="obtenerListadoUsuarioSistemaPaginarAct" statementType="CALLABLE" parameterMap="parametrosPaginar" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUARIO_PERFIL_PAG(?,?,?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosAsociados" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioPerfilMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioPerfilSistemaPorUsuarioAct" statementType="CALLABLE" parameterMap="parametrosAsociados" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUA_PERF_SIST_USU(?,?) }
+	</select>
+	
+	<parameterMap id="parametrosEliminarAsociacion" type="java.util.Map">
+		<parameter property="codUsuario"  mode="IN" />
+    </parameterMap>
+	
+	<delete id="eliminarAsociacionesActuales" statementType="CALLABLE" parameterMap="parametrosEliminarAsociacion">
+	    { CALL PKG_SEGURIDAD_N.SP_ELIMINAR_ASOC_USUA(?) }
+	</delete>
+	
+	<parameterMap id="parametrosAuditoria" type="java.util.Map">
+		<parameter property="codSistema"  mode="IN" />
+		<parameter property="codUsuario"  mode="IN" />
+		<parameter property="sustentacion"  mode="IN" />
+		<parameter property="responsable"  mode="IN" />
+		<parameter property="codPerfil"  mode="IN" />
+		<parameter property="codArea"  mode="IN" />
+		<parameter property="descripcion"  mode="IN" />
+    </parameterMap>
+	
+	<insert id="actualizarAuditoriaUsuario" parameterMap="parametrosAuditoria" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD_N.SP_ACTUALIZAR_AUDITORIA(?,?,?,?,?,?,?) }
+    </insert>
+    
+    <select id="obtenerListadoUsuarioPerfilSistemaPorUsuarioLDAP" statementType="CALLABLE" parameterMap="parametrosAsociados" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUA_PERF_SIST_LDAP(?,?) }
+	</select>
+	
+	<delete id="eliminarAsociacionesActualesLDAP" statementType="CALLABLE" parameterMap="parametrosEliminarAsociacion">
+	    { CALL PKG_SEGURIDAD_N.SP_ELIMINAR_ASOC_USUA_LDAP(?) }
+	</delete>
+	
+	<insert id="grabarUsuarioPerfilSistemaLDAP" parameterType="usuarioPerfilBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD_N.SP_NUEVO_USER_LDAP_PERF_SIST(
+        	#{codPerfil}
+		    ,#{codSistema}
+		    ,#{codUsuario}
+        ) }
+    </insert>
+    
+<!-- 	fin adecuacion seguridad2 -->
+			
+</mapper>

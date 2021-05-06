@@ -1,0 +1,38 @@
+package pe.com.sedapal.seguridad.core.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import pe.com.sedapal.seguridad.core.bean.ContratistaBean;
+import pe.com.sedapal.seguridad.core.mybatis.dao.ContratistaMBDAO;
+import pe.com.sedapal.seguridad.core.service.ContratistaService;
+
+@Service
+public class ContratistaServiceImpl implements ContratistaService {
+	
+	@Autowired
+	ContratistaMBDAO contratistaMBDAO;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(rollbackFor=Exception.class)
+	public List<ContratistaBean> listarContratistas() throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> parametrosListar = new HashMap<String, Object>();
+		List<ContratistaBean> listaContratistas = new ArrayList<ContratistaBean>();
+		try {
+			contratistaMBDAO.listarContratistas(parametrosListar);
+			listaContratistas = (List<ContratistaBean>) parametrosListar.get("PAR_OUT_CURSOR");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return listaContratistas;
+	}
+	
+}

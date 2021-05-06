@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.TrabajadorMBDAO">
+   		      
+	<resultMap id="TrabajadorMap" type="TrabajadorBean">
+   		<result property="nCodTrabajador"	column="NCODTRABAJADOR"/>
+		<result property="nFicha"	column="NFICHA"/>
+		<result property="vNombres"	column="VNOMBRES"/>
+		<result property="vApePaterno"	column="VAPEPATERNO"/>
+		<result property="vApeMaterno"	column="VAPEMATERNO"/>
+		<result property="nAnexo"	column="NANEXO"/>
+		<result property="nDiaonOmastico"	column="NDIAONOMASTICO"/>
+		<result property="nMesonOmastico"	column="NMESONOMASTICO"/>
+		<result property="vCargo"	column="VCARGO"/>
+		<result property="vDirelectronica"	column="VDIRELECTRONICA"/>
+		<result property="nCodArea"	column="NCODAREA"/>
+		<result property="vCodTipo"	column="VCODTIPO"/>
+		<result property="dFecCreacion"	column="DFECCREACION"/>
+		<result property="dFecActualizacion"	column="DFECACTUALIZACION"/>
+		<result property="vResponsable"	column="VRESPONSABLE"/>
+		<result property="dFecNacimiento"	column="DFECNACIMIENTO"/>
+		<result property="dFecIngreso"	column="DFECINGRESO"/>
+		<result property="vUbicacion"	column="VUBICACION"/>
+		<result property="nNivel"	column="NNIVEL"/>
+		<result property="nNextel"	column="NNEXTEL"/>
+		<result property="nCelular"	column="NCELULAR"/>
+		<result property="nAnexocer"	column="NANEXOCER"/>
+		<result property="vCodEstado"	column="VCODESTADO"/>
+		<result property="nCodTipo"	column="NCODTIPO"/>
+		<result property="nCenCosto"	column="NCENCOSTO"/>
+		<result property="nCodLocal"	column="NCODLOCAL"/>
+		<result property="nSubArea"	column="NSUBAREA"/>
+		<result property="ind_email"	column="IND_EMAIL"/>
+		<result property="dFecCese"	column="DFECCESE"/>
+		<result property="vDni"	column="VDNI"/>
+		<result property="vTs"	column="VTS"/>
+		<result property="vNivel"	column="VNIVEL"/>
+		<result property="vEc"	column="VEC"/>
+		<result property="nHijos"	column="NHIJOS"/>
+		<result property="vDato1"	column="VDATO1"/>
+		<result property="nDato1"	column="NDATO1"/>
+		<result property="vDato2"	column="VDATO2"/>
+		<result property="nDato2"	column="NDATO2"/>
+		<result property="vTelefono"	column="VTELEFONO"/>
+		<result property="vDireccion"	column="VDIRECCION"/>
+		<result property="vAreaPersonal"	column="VAREAPERSONAL"/>
+<!-- 		inicio adecuacion seguridad2 -->
+		<result property="descArea"   column="DESCRIPCIONAREA"/>
+<!-- 		fin adecuacion seguridad2 -->
+    </resultMap>
+    
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="TrabajadorMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemas" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_TRABAJADOR(?) }
+	</select>
+	
+	<parameterMap id="parametrosCodigo" type="java.util.Map">
+		<parameter property="codTrabajador"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="TrabajadorMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerTrabajadorPorCodigo" statementType="CALLABLE" parameterMap="parametrosCodigo" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_TRABAJADOR_COD(?,?) }
+	</select>
+	
+	<parameterMap id="parametrosFicha" type="java.util.Map">
+		<parameter property="codFicha"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="TrabajadorMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerTrabajadorPorFicha" statementType="CALLABLE" parameterMap="parametrosFicha" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_TRABAJADOR_FICHA(?,?) }
+	</select>
+    
+<!--     inicio adecuacion seguridad2 -->
+	<select id="obtenerDatosTrabajadorWs" statementType="CALLABLE" parameterMap="parametrosFicha">
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_DATOS_TRABAJADOR_WS(?,?)}
+	</select>
+<!-- 	fin adecuacion seguridad2 -->
+    	
+</mapper>

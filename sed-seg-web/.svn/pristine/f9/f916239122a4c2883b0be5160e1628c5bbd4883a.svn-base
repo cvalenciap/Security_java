@@ -1,0 +1,276 @@
+package pe.com.sedapal.seguridad.web.controlador;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import pe.com.sedapal.seguridad.core.bean.ContratistaBean;
+import pe.com.sedapal.seguridad.core.bean.JQueryDataTableParamBean;
+import pe.com.sedapal.seguridad.core.bean.ParametroBean;
+import pe.com.sedapal.seguridad.core.bean.SistemaBean;
+import pe.com.sedapal.seguridad.core.commons.Constants;
+import pe.com.sedapal.seguridad.core.service.ContratistaService;
+import pe.com.sedapal.seguridad.core.service.SeguridadService;
+import pe.com.sedapal.seguridad.web.bean.TablaDatosBean;
+import pe.com.sedapal.seguridad.web.util.SecurityUtil;
+import pe.com.sedapal.seguridad.web.validator.PerfilValidator;
+
+@Controller
+public class ContratistaController {
+	
+	private final Logger logger = LoggerFactory.getLogger(PerfilController.class);
+
+	@Autowired
+	private SeguridadService seguridadService;
+
+	@Autowired
+	private ContratistaService contratistaService;
+
+	@Autowired
+	private PerfilValidator perfilValidator;
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(perfilValidator);
+	}
+	
+	
+	@RequestMapping(value = "/contratista", method = RequestMethod.GET)
+	public String listarModulo(Model model, final RedirectAttributes redirectAttributes) {
+        
+		try {
+			
+			if (SecurityUtil.hasRole("/contratista")) {
+				//model.addAttribute("contratista", this.seguridadService.obtenerListadoSistemas());
+			} else {
+				return "accesourl";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Error al realizar la operación");
+		}
+		// return "perfil/lista";
+		return "contratista/listaPaginacion";
+	}
+	
+	// metodo que ejecuta acción de listado
+	@RequestMapping(value = "/contratista/getContratistaListado", method = RequestMethod.GET)
+	public @ResponseBody TablaDatosBean getContratistaListado(HttpServletRequest request,@RequestParam Map<String,String> allRequestParams) throws RuntimeException {
+		List<ContratistaBean> listDatos = new ArrayList<ContratistaBean>();
+
+		JQueryDataTableParamBean.DTParameters param = DataTablesParamUtility.getParam(request);
+
+		int draw;
+		int length;
+		int start;
+		String sortColumn = "";
+		String search = "";
+
+		draw = param.getDraw();
+		length = param.getLength();
+		start = param.getStart();
+		String strTipo="";
+		String strSearch="";
+		
+		if(allRequestParams.get("cpTipo")!=null && !"".equals(allRequestParams.get("cpTipo"))) {
+			strTipo = allRequestParams.get("cpTipo");
+		}
+		
+		if(allRequestParams.get("cpSearch")!=null && !"".equals(allRequestParams.get("cpSearch"))) {
+			strSearch = allRequestParams.get("cpSearch");
+		}
+		
+		search = strTipo+"|"+strSearch; 
+//		search = param.getSearch();
+
+		int pageIndex = start / length;
+
+		TablaDatosBean tablaDatos = null;
+
+		int recordsTotal = 0;
+		int recordsFiltered = 0;
+		List<String> permisos;
+		StringBuffer botones = null;
+		
+		try {
+			recordsTotal = contratistaService.obtenerListadoContratistaPaginarTotal(search);
+			recordsFiltered = recordsTotal;
+			System.out.println(length);
+			listDatos = contratistaService.obtenerListadoContratistaPaginar(length, pageIndex, search, sortColumn);
+			permisos = (ArrayList<String>) request.getSession().getAttribute("permisos");
+			tablaDatos = new TablaDatosBean();
+
+			tablaDatos.setDraw(draw);
+			tablaDatos.setRecordsFiltered(recordsFiltered);
+			tablaDatos.setRecordsTotal(recordsTotal);
+
+			String[][] datos = new String[listDatos.size()][8];
+			int row = 0;
+
+			for (ContratistaBean contratista : listDatos) {
+				botones = new StringBuffer();
+				datos[row][0] = contratista.getIdContratista().toString();
+				datos[row][1] = contratista.getDesRazonCorta();
+				datos[row][2] = contratista.getNroDocRazon().toString();
+				datos[row][3] = contratista.getDesEstado();
+				datos[row][4] = contratista.getDireccion();
+				datos[row][5] = contratista.getDesRepresentante();
+				datos[row][6] = contratista.getTelefono();
+				// datos[row][7] = perfilSistema.getCodSistema().toString();
+				if (permisos.contains("/contratistaVISUALIZAR")) {
+					botones.append(
+							"<sed:seguridad accion=\"/contratistaVISUALIZAR\"><button class=\"close-image btn btn-default btn-view\" onclick=\"location.href=${verUrl}\"> <img src=\"resources/core/images/buscar.png\"></button></sed:seguridad>");
+				}
+				if (permisos.contains("/contratistaMODIFICAR")) {
+					botones.append(
+							"<sed:seguridad accion=\"/contratistaMODIFICAR\"><button class=\"close-image btn btn-default btn-update\" onclick=\"location.href=${updateUrl}\"> <img src=\"resources/core/images/edit-icon.png\"></button>");
+				}
+				if (permisos.contains("/contratistaELIMINAR") && "1".equals(contratista.getCodEstado())) {
+					botones.append(
+							"<sed:seguridad accion=\"/contratistaELIMINAR\"><button class=\"close-image btn btn-default btn-delete\" onclick=\"location.href=${deleteUrl}\"> <img src=\"resources/core/images/eliminar.png\"></button></sed:seguridad>");
+				}
+				datos[row][7] = botones.toString();
+				row++;
+			}
+
+			tablaDatos.setData(datos);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return tablaDatos;
+	}
+	
+	// metodo que ejecuta acción de nuevo registro
+	@RequestMapping(value = "/contratista/add", method = RequestMethod.GET)
+	public String nuevoPerfilForm(Model model, //
+			@RequestParam(value = "url", defaultValue = "") String urlReturn,
+			final RedirectAttributes redirectAttributes) {
+
+		if (SecurityUtil.hasRole("/contratista")) {
+			redirectAttributes.addFlashAttribute("css", "");
+			redirectAttributes.addFlashAttribute("msg", "");
+			logger.info("agregar contratista()");
+			try {
+			ContratistaBean contratistaBean = new ContratistaBean();
+			contratistaBean.setCodEstado(Constants.ESTADO_ACTIVO_STR);
+			
+			model.addAttribute("contratistaForm", contratistaBean);
+			model.addAttribute("urlReturn", urlReturn);
+			
+			populateDefaultModel(model);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			return "accesourl";
+		}
+
+		return "contratista/contratistaForm";
+	}
+	
+	// metodo que ejecuta acción de grabar o actualizar
+	@RequestMapping(value = "/contratista", method = RequestMethod.POST)
+	public String grabarOActualizarContratista(@ModelAttribute("aplicacionForm") @Validated ContratistaBean contratistaBean,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) throws RuntimeException {
+
+		logger.info("grabar o actualizar aplicacion() : {}", contratistaBean);
+		try {
+
+			if (SecurityUtil.hasRole("/aplicaciones")) {
+				if (result.hasErrors()) {
+					contratistaBean.setCodEstado(Constants.ESTADO_ACTIVO_STR);
+					populateDefaultModel(model);
+					return "aplicaciones/aplicacionForm";
+				} else {
+					redirectAttributes.addFlashAttribute("css", "success");
+					if (contratistaBean.isNew()) {
+						redirectAttributes.addFlashAttribute("msg", "Se Registró Satisfactoriamente!");
+						contratistaBean.setCodEstado(Constants.ESTADO_ACTIVO_STR);
+						contratistaBean.setUsuarioCreacion(SecurityUtil.getAuthenticationName());
+//						inicio adecuacion seguridad2
+//						this.seguridadService.grabarSistema(aplicacionBean);
+						this.contratistaService.grabarContratista(contratistaBean);
+//						fin adecuacion seguridad2
+					} else {
+						/*if(contratistaBean.getFlagNivel() == null){
+							contratistaBean.setFlagNivel(this.seguridadService.obtenerSistemaPorId(contratistaBean.getCodSistema()).getFlagNivel());
+						}*/
+						contratistaBean.setUsuarioModificacion(SecurityUtil.getAuthenticationName());
+//						inicio adecuacion seguridad2
+//						this.seguridadService.actualizarSistema(aplicacionBean);
+						this.contratistaService.actualizarContratista(contratistaBean);
+//						fin adecuacion seguridad2
+						redirectAttributes.addFlashAttribute("msg", "Se Actualizó Satisfactoriamente!");
+					}
+				}
+			} else {
+				return "accesourl";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.asMap().put("css", "danger");
+			model.asMap().put("msg", "Error al realizar la operación " + e.getMessage());
+			populateDefaultModel(model);
+			model.addAttribute("aplicacionForm", contratistaBean);
+			return "contratista/contratistaForm";
+		}
+		return "redirect:/contratista";
+
+	}
+
+	
+	private void populateDefaultModel(Model model) throws RuntimeException {
+		List<SistemaBean> lstSistema;
+		Map<Integer, String> sistemas = new HashMap<Integer, String>();
+		Map<Integer, String> estados = new HashMap<Integer, String>();
+
+		List<ParametroBean> parametros;
+
+		try {
+			lstSistema = seguridadService.obtenerListadoSistemasActivos();
+			for (SistemaBean sistemaBean : lstSistema) {
+				sistemas.put(sistemaBean.getCodSistema(),
+						sistemaBean.getCodSistema() + " - " + sistemaBean.getDescripcion());
+			}
+			Map<Integer, String> treeMap = new TreeMap<Integer, String>(sistemas);
+			model.addAttribute("sistemas", treeMap);
+			parametros = seguridadService.obtenerListadoParametrosPorCodigoParametro(Constants.ESTADO);
+			for (ParametroBean parametroBean : parametros) {
+				if (parametroBean.getId().intValue() != 2) {
+					estados.put(parametroBean.getId(), parametroBean.getDescripcion());
+				}
+			}
+			model.addAttribute("estados", estados);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
+}

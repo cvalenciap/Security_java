@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.MenuMBDAO">
+   	    	    
+   	<resultMap id="MenuBeanMap" type="MenuBean">
+   		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="codModulo"				column="NCODMODULO"/>
+ 		<result property="codFormulario"				column="NCODFORMULARIO"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="urlFormulario"		column="VURL_FORMULARIO"/>
+ 		<result property="codFormularioPadre"		column="NCODFORMULARIO_PADRE"/>
+ 		<result property="nivelFormulario"		column="NNIVEL_FORMULARIO"/>
+ 		<result property="ordenFormulario"		column="NORDEN_FORMULARIO"/>
+ 		<result property="estado"	column="NESTADO"/>
+    </resultMap>   
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+    	<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codModulo"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="MenuBeanMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormularioMenu" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_FORM_MEN(?,?,?) }
+	</select>
+	
+</mapper>

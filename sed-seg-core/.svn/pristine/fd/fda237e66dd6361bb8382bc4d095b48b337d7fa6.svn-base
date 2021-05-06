@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.ContratistaMBDAO" >
+	
+	
+	 <insert id="grabarContratista" parameterType="ContratistaBean" statementType="CALLABLE">
+        { CALL S_GUIA.PKG_SEG_CONTRATISTAS.PRC_NUEVO_CONTRATISTA(
+        	 #{desRazon}
+		    ,#{desRazonCorta}
+		    ,#{direccion}
+		    ,#{codDocRazon}
+		    ,#{nroDocRazon}
+		    ,#{desRepresentante} 
+		    ,#{codDocRepresentante}
+		    ,#{nroDocRepresentante}
+		    ,#{correo} 
+		    ,#{telefono}
+		    ,#{codEstado}
+		    ,#{desEstado}
+        ) }
+    </insert>	   	    	  	
+   	    	    
+	<update id="actualizarContratista" parameterType="ContratistaBean" statementType="CALLABLE">
+		{CALL S_GUIA.PKG_SEG_CONTRATISTAS.PRC_ACTUALIZAR_CONTRATISTA(
+			 #{idContratista}
+		   	 #{desRazon}
+		    ,#{desRazonCorta}
+		    ,#{direccion}
+		    ,#{codDocRazon}
+		    ,#{nroDocRazon}
+		    ,#{desRepresentante} 
+		    ,#{codDocRepresentante}
+		    ,#{nroDocRepresentante}
+		    ,#{correo} 
+		    ,#{telefono}
+		    ,#{codEstado}
+		    ,#{desEstado}
+		)}
+    </update>   	
+	
+	
+	<resultMap id="ContratistaMap" type="ContratistaBean">
+   		<result property="idContratista"			column="N_ID_CONTRATISTA"/>
+ 		<result property="desRazon"					column="V_DES_RAZON"/>
+ 		<result property="desRazonCorta"			column="V_DES_ABREV"/>
+ 		<result property="direccion"				column="V_DES_DIRECCION"/>
+ 		<result property="codDocRazon"				column="N_TIPO_DOC_RAZ"/>
+ 		<result property="nroDocRazon"				column="V_NRO_DOC_RAZ"/>
+ 		<result property="desRepresentante"			column="V_DES_REPRESENTANTE"/>
+ 		<result property="codDocRepresentante"		column="N_TIPO_DOC_REP"/>
+ 		<result property="nroDocRepresentante"		column="V_NRO_DOC_REP"/>
+ 		<result property="correo"					column="V_DES_CORREO"/>
+ 		<result property="telefono"					column="V_DES_TELEFONOS"/>
+ 		<result property="codEstado"				column="V_ST_REGI"/>
+ 		<result property="desEstado"				column="DES_ESTADO"/>
+    </resultMap>   	    	 
+   	    	 
+	<parameterMap id="parametrosListar" type="java.util.Map">
+		<parameter property="PAR_OUT_CURSOR"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ContratistaMap"/>
+    </parameterMap>     
+    
+	<select id="listarContratistas" statementType="CALLABLE" parameterMap="parametrosListar" >
+		{ CALL S_GUIA.PKG_SEG_CONTRATISTAS.PRC_LIST_CONTRATISTAS(?) }
+	</select> 		
+	
+	<parameterMap id="parametrosPagina" type="java.util.Map">
+    	<parameter property="valueSearch"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="P_TotalReg"  jdbcType="NUMERIC"	javaType="java.lang.Integer"	mode="OUT"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoContratistaPaginarTotal" statementType="CALLABLE" parameterMap="parametrosPagina" >
+		{ CALL S_GUIA.PKG_SEG_CONTRATISTAS.PRC_OBTENER_CONTRATISTA_TOT(?,?) }
+	</select>
+    
+    <parameterMap id="parametrosPaginar" type="java.util.Map">
+    	<parameter property="pageSize"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="pageIndex"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="valueSearch"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="sortColumn"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ContratistaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoContratistaPaginar" statementType="CALLABLE" parameterMap="parametrosPaginar" >
+		{ CALL S_GUIA.PKG_SEG_CONTRATISTAS.PRC_OBTENER_CONTRATISTA_PAG(?,?,?,?,?) }
+	</select> 
+	
+	
+   	    	     	
+</mapper>

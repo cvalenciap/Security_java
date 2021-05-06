@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.ParametroMBDAO">
+   	    	    
+   	<resultMap id="ParametroBeanMap" type="ParametroBean">
+   		<result property="codParametro"			column="VCODPARAMETRO"/>
+ 		<result property="codigo"				column="NCODIGO"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="id"		column="NID"/>
+ 		<result property="valor"		column="VVALOR"/>
+ 		<result property="usuarioCreacion"		column="VRESCRE"/>
+ 		<result property="fechaCreacion"		column="DFECCRE"/>
+ 		<result property="usuarioModificacion"		column="VRESACT"/>
+ 		<result property="fechaModificacion"		column="DFECACT"/>
+ 		<result property="nombreEstado"		column="NOMBREESTADO"/>
+    </resultMap>   
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+    	<parameter property="codParametro"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ParametroBeanMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoParametrosPorCodigoParametro" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_PARAMETRO(?,?) }
+	</select>
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+    	<parameter property="codParametro"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="codigo"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ParametroBeanMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerParametroPorCodigoParametroPorCodigo" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_PARAMETRO_COD(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosUnicos" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ParametroBeanMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoParametroUnicos" statementType="CALLABLE" parameterMap="parametrosUnicos" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_PARAMETRO_GENERAL(?) }
+	</select>
+	
+	<update id="actualizarParametro" parameterType="parametroBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_PARAMETRO_COD(
+			#{codParametro}
+		    ,#{codigo}
+		    ,#{descripcion}
+		    ,#{valor}
+		    ,#{estado}
+		    ,#{usuarioModificacion}
+		)}
+    </update>
+	
+	<parameterMap id="parametrosCodigo" type="java.util.Map">
+		<parameter property="codParametro"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ParametroBeanMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerParametroPorCodigoParametro" statementType="CALLABLE" parameterMap="parametrosCodigo" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_PARAMETRO(?,?) }
+	</select>
+	
+</mapper>

@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pe.com.sedapal.seguridad.ws</groupId>
+	<artifactId>webserviceserguridad</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>sed-seg-ws Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<logback.version>1.1.3</logback.version>
+		<jcl.slf4j.version>1.7.12</jcl.slf4j.version>
+		<spring.version>4.2.2.RELEASE</spring.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>java.net</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+
+
+
+		<dependency>
+			<groupId>pe.com.sedapal.seguridad.core</groupId>
+			<artifactId>sed-seg-core</artifactId>
+			<version>1.0.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.ws/spring-ws-core -->
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-core</artifactId>
+			<version>2.4.0.RELEASE</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+
+		<!-- Library from java.net, integrate Spring with JAX-WS -->
+		<dependency>
+			<groupId>org.jvnet.jax-ws-commons.spring</groupId>
+			<artifactId>jaxws-spring</artifactId>
+			<version>1.8</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.ws</groupId>
+					<artifactId>jaxws-rt</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jws</groupId>
+					<artifactId>jsr181-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xbean</groupId>
+			<artifactId>xbean-spring</artifactId>
+			<version>2.7</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	
+
+	</dependencies>
+	<build>
+		<finalName>webserviceserguridad</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

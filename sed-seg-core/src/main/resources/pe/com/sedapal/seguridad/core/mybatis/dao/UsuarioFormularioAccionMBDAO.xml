@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.UsuarioFormularioAccionMBDAO">
+   		      
+	<resultMap id="StringMap" type="String">
+    </resultMap>
+    
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+    	<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="StringMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioAccionPorCodigo" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_ACCION_COD(?,?) }
+	</select>
+	
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="StringMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioAccionPorCodigoPb" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_ACCION_COD(?,?) }
+	</select>
+	
+	<parameterMap id="parametrosFicha" type="java.util.Map">
+		<parameter property="codFicha"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="TrabajadorMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerTrabajadorPorFicha" statementType="CALLABLE" parameterMap="parametrosFicha" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_TRABAJADOR_FICHA(?,?) }
+	</select>
+	
+<!-- 	inicio adecuacion seguridad2 -->
+	<parameterMap id="parametrosBusquedaLista" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="codSistema" jdbcType="NUMERIC"  mode="IN"/>
+		<parameter property="codPerfil" jdbcType="NUMERIC"  mode="IN"/>
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="StringMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuarioAccionPorCodigoAct" statementType="CALLABLE" parameterMap="parametrosBusquedaLista" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUARIO_ACCION_COD(?,?,?,?) }
+	</select>
+	
+	<select id="obtenerListadoUsuarioAccionPorCodigoLDAP" statementType="CALLABLE" parameterMap="parametrosBusquedaLista" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUARIO_ACCION_LDAP(?,?,?,?) }
+	</select>
+<!-- 	fin adecuacion seguridad2 -->
+	    	
+</mapper>

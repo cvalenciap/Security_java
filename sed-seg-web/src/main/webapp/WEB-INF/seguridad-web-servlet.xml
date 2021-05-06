@@ -1,0 +1,41 @@
+<!-- #Proyecto: Nuevo Sistema de Seguridad de Sedapal. #Fecha Creación: 27/12/2016. 
+	#Autor: Luis Castro Valdez. #Empresa: Tgestiona. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/util 
+                http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- Scan the JavaConfig -->
+	<context:component-scan base-package="pe.com.sedapal.seguridad.web.config" />
+	<context:component-scan base-package="pe.com.sedapal.seguridad.web" />
+	<context:component-scan base-package="pe.com.sedapal.seguridad.web.service" />
+	<context:component-scan base-package="pe.com.sedapal.seguridad.core.bean.util" />
+
+
+	<context:annotation-config />
+	<mvc:interceptors>
+		<bean id="webContentInterceptor"
+			class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+			<property name="cacheSeconds" value="0" />
+			<property name="useExpiresHeader" value="true" />
+			<property name="useCacheControlHeader" value="true" />
+			<property name="useCacheControlNoStore" value="true" />
+		</bean>
+		 
+	</mvc:interceptors>
+	
+	
+	
+	
+
+
+</beans>

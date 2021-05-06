@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.AccionFormularioMBDAO">
+   	 
+   	<insert id="grabarAccionFormulario" parameterType="accionFormularioBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD.SP_NUEVO_ACCION_FORMULARIO(
+        	#{codAccionFormulario}
+		    ,#{codSistema}
+		    ,#{codModulo}
+		    ,#{codFormulario}
+		    ,#{codParametro}
+		    ,#{codigo}
+		    ,#{estado}  
+        ) }
+    </insert> 
+   	
+   	<update id="actualizarAccionFormulario" parameterType="accionFormularioBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_ACCION_FORMULARIO(
+			#{codAccionFormulario}
+		    ,#{estado} 
+		)}
+    </update>
+   	
+   	<resultMap id="AccionFormularioBeanMap" type="AccionFormularioBean">
+		<result property="codAccionFormulario"		column="NCODACCION_FORMULARIO"/>
+ 		<result property="codSistema"				column="NCODSISTEMA"/>
+ 		<result property="codModulo"				column="NCODMODULO"/>
+ 		<result property="codFormulario"			column="NCODFORMULARIO"/>
+ 		<result property="codParametro"				column="VCODPARAMETRO"/>
+ 		<result property="codigo"					column="NCODIGO"/>
+ 		<result property="estado"					column="NESTADO"/>
+ 		<result property="nombreAccion"				column="VDESCRIPCION"/>
+ 		<result property="accionPerfil"				column="ACCIONPERFIL"/>
+    </resultMap>
+		
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="codSistema"		jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codModulo"			jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codFormulario"		jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  			jdbcType="CURSOR"	javaType="java.sql.ResultSet"		mode="OUT"	resultMap="AccionFormularioBeanMap"/>
+    </parameterMap> 
+	
+	<select id="obtenerListadoAccionFormularioPorCodigo" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_ACCION_FORMULARIO(?,?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="codSistema"		jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codModulo"			jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codFormulario"		jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codPerfil"			jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  			jdbcType="CURSOR"	javaType="java.sql.ResultSet"		mode="OUT"	resultMap="AccionFormularioBeanMap"/>
+    </parameterMap> 
+	
+	<select id="obtenerListadoAccionFormularioPerfilPorCodigo" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_ACCION_FORM_PERFIL(?,?,?,?,?) }
+	</select>
+	
+	<resultMap id="AccionUsuarioBeanMap" 		type="AccionUsuarioBean">
+		<result property="codAccionFormulario"		column="NCODACCION_FORMULARIO"/>
+ 		<result property="codParametro"				column="VCODPARAMETRO"/>
+ 		<result property="codigo"					column="NCODIGO"/>
+ 		<result property="estado"					column="NESTADO"/>
+ 		<result property="nombreAccion"				column="VDESCRIPCION"/>
+ 		<result property="accionPerfil"				column="ACCIONPERFIL"/>
+    </resultMap>
+    
+    <parameterMap id="parametrosUsuario" type="java.util.Map">
+		<parameter property="codSistema"		jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codModulo"			jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codFormulario"		jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="codPerfil"			jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  			jdbcType="CURSOR"	javaType="java.sql.ResultSet"		mode="OUT"	resultMap="AccionUsuarioBeanMap"/>
+    </parameterMap> 
+
+	<select id="obtenerListadoAccionFormularioPerfilPorUsuario" statementType="CALLABLE" parameterMap="parametrosUsuario" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_ACC_FORM_PER_USU(?,?,?,?,?) }
+	</select>
+	
+</mapper>

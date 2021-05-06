@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.PerfilAccionMBDAO">
+   	    	    
+   	<resultMap id="PerfilAccionMap" type="PerfilAccionBean">
+   		<result property="codPerfilAccion"			column="NCODPERFIL_ACCION"/>
+ 		<result property="codPerfil"				column="NCODPERFIL"/>
+ 		<result property="codSistema"				column="NCODSISTEMA"/>
+ 		<result property="codAccionFormulario"				column="NCODACCION_FORMULARIO"/>
+ 		<result property="nombreEstado"		column="NOMBREESTADO"/>
+    </resultMap>   
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+    	<parameter property="codPerfil"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="PerfilAccionMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoPerfilAccionPorCodigo" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_PERFIL_ACCION(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+    	<parameter property="codPerfilAccion"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="PerfilAccionMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerPerfilAccionPorCodigo" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_PERFIL_ACCION_COD(?,?) }
+	</select>
+	
+	<insert id="grabarPerfilAccion" parameterType="perfilAccionBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_NUEVO_PERFIL_ACCION(
+			#{codPerfilAccion}
+		    ,#{codPerfil}
+		    ,#{codSistema}
+		    ,#{codAccionFormulario}
+		)}
+    </insert>
+	
+	<update id="actualizarPerfilAccion" parameterType="perfilAccionBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_PERFIL_ACCION(
+			#{codPerfil}
+		    ,#{codSistema}
+		)}
+    </update>
+    
+    <delete id = "eliminarPerfilAccion" parameterType ="Map" statementType="CALLABLE">
+      {CALL PKG_SEGURIDAD.SP_UPDATE_PERFIL_ACCION(
+			#{codPerfil}
+		    ,#{codSistema}
+		)}
+   </delete>
+	
+</mapper>

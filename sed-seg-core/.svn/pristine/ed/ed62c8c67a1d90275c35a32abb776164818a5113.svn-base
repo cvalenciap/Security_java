@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.SistemaMBDAO">
+   	    	    
+	<insert id="grabarSistema" parameterType="sistemaBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD.SP_NUEVO_SISTEMA(
+        	#{descripcion}
+		    ,#{abreviatura}
+		    ,#{estado}
+		    ,#{programa}
+		    ,#{flagNivel}
+		    ,#{usuarioCreacion} 
+        ) }
+    </insert>	   	    	  	
+   	    	    
+	<update id="actualizarSistema" parameterType="sistemaBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_SISTEMA(
+			#{codSistema}
+		    ,#{descripcion}
+		    ,#{abreviatura}
+		    ,#{estado}
+		    ,#{programa}
+		    ,#{flagNivel}
+		    ,#{usuarioModificacion}
+		)}
+    </update>   	    	    	
+   	    	    
+	<resultMap id="SistemaMap" type="SistemaBean">
+   		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="abreviatura"				column="VABREVIATURA"/>
+ 		<result property="programa"				column="VPROGRAMA"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="estadoNombre"				column="VESTADONOMBRE"/>
+ 		<result property="flagNivel"				column="VFLAG_NIVEL"/>
+ 		<result property="usuarioCreacion"				column="VRESCRE"/>
+ 		<result property="fechaCreacion"				column="DFECCRE"/>
+ 		<result property="usuarioModificacion"				column="VRESACT"/>
+ 		<result property="fechaModificacion"				column="DFECACT"/>
+ 		<result property="nivelNombre"				column="VNIVELNOMBRE"/>
+    </resultMap>
+    
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemas" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SISTEMAS(?) }
+	</select>
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="idSistema"	jdbcType="NUMERIC"	mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerSistemaPorId" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SISTEMA_ID(?,?) }
+	</select>	   	    	    
+	
+	<update id="actualizarEstadoSistema" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_SISTEMA_ESTADO(
+			#{idSistema}
+		    ,#{estado}
+		    ,#{usuario}
+		)}
+    </update>
+    
+    <parameterMap id="parametrosAbreviatura" type="java.util.Map">
+		<parameter property="abreviatura"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemasPorAbreviatura" statementType="CALLABLE" parameterMap="parametrosAbreviatura" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SISTEMAS_POR_ABRE(?,?) }
+	</select>
+	
+	<parameterMap id="parametrosActivos" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemasActivos" statementType="CALLABLE" parameterMap="parametrosActivos" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SISTEMAS_ACTIVOS(?) }
+	</select>
+	
+<!-- 	inicio adecuacion seguridad2 -->
+	<parameterMap id="sistemasDetalle" type="java.util.Map">
+		<parameter property="codUsuario"   jdbcType="VARCHAR"   mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerDetalleSistemasUsuario" statementType="CALLABLE" parameterMap="sistemasDetalle" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_DETALLE_SISTEMAS(?,?) }
+	</select>
+	
+	<insert id="grabarSistemaAct" parameterType="sistemaBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD_N.SP_NUEVO_SISTEMA(
+        	#{descripcion}
+		    ,#{abreviatura}
+		    ,#{estado}
+		    ,#{programa}
+		    ,#{flagNivel}
+		    ,#{usuarioCreacion}
+		    ,#{autenticacion} 
+        ) }
+    </insert>	   	    	  	
+   	    	    
+	<update id="actualizarSistemaAct" parameterType="sistemaBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD_N.SP_UPDATE_SISTEMA(
+			#{codSistema}
+		    ,#{descripcion}
+		    ,#{abreviatura}
+		    ,#{estado}
+		    ,#{programa}
+		    ,#{flagNivel}
+		    ,#{usuarioModificacion}
+		    ,#{autenticacion}
+		)}
+    </update>
+    
+    <select id="obtenerSistemaPorIdAct" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_SISTEMA_ID(?,?) }
+	</select>
+<!-- 	fin adecuacion seguridad2 -->
+    	
+</mapper>

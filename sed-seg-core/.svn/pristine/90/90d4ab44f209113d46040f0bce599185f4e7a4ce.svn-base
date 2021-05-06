@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.ClaveMBDAO">
+   	    	    
+   	<resultMap id="ClaveBeanMap" type="ClaveBean">
+ 		<result property="codUsuario"			column="VCODUSUARIO"/>
+ 		<result property="codClave"				column="NCODCLAVE"/>
+ 		<result property="pass"				column="VPASS"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="flagTemp"		column="VFLAG_TEMP"/>
+ 		<result property="usuarioCreacion"		column="VRESCRE"/>
+ 		<result property="fechaCreacion"		column="DFECCRE"/>
+ 		<result property="usuarioModificacion"	column="VRESACT"/>
+ 		<result property="fechaModificacion"	column="DFECACT"/>
+    </resultMap>   
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="ClaveBeanMap"/>
+    </parameterMap> 
+	
+	<select id="obtenerClaves" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_CLAVES(?,?) }
+	</select>
+	
+<!-- 	<parameterMap id="parametrosDetalle" type="java.util.Map"> -->
+<!-- 		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" /> -->
+<!-- 		<parameter property="pass"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" /> -->
+<!-- 		<parameter property="flagTemp"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" /> -->
+<!--     </parameterMap>  -->
+	
+	<insert id="mantenimientoClaves" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_MANTENIMIENTO_CLAVES(
+			#{codUsuario}
+			,#{pass}
+			,#{flagTemp}
+		)}
+    </insert>
+    
+    <update id="ejecutarProcesosTemporal" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_CAMBIO_CLAVE_OBLIGATORIO(
+			#{codUsuario}
+		)}
+    </update>
+    
+    <update id="ejecutarProcesosObligatorio" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_CAMBIO_CLAVE_TMP(
+			#{codUsuario}
+		)}
+    </update>
+    
+    <select id="obtenerUltimaClave" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_VERI_CLAVE_INVALIDA(?,?) }
+	</select>
+	
+</mapper>

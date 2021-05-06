@@ -1,0 +1,15 @@
+#en local
+#urlws=http://localhost:8181/webserviceserguridad/seguridadws?wsdl
+#tgestiona server desarrollo
+#urlws=http://1.1.194.17:8080/webserviceserguridad/seguridadws?wsdl
+#preprod sesapal
+#urlws=http://1.1.194.119:8084/webserviceserguridad/seguridadws?wsdl
+#tgestiona server adolfo
+#urlws=http://192.168.150.130:8050/webserviceserguridad/seguridadws?wsdl
+
+#en local - Canvia
+#urlws=http://localhost:8090/webserviceserguridad/seguridadws?wsdl
+
+#prueba
+urlws=http://localhost:8080/webserviceserguridad_ACT/seguridadws?wsdl
+

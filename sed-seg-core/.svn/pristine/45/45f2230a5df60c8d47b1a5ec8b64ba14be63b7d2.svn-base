@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.AreaMBDAO">
+   	    	    
+   	<resultMap id="AreaBeanMap" type="AreaBean">
+<!--         <id property="codArea"	column="NCODAREA" />    -->
+    </resultMap>   
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="AreaBeanMap"/>
+    </parameterMap> 
+	
+	<select id="listarTodos" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_AREA(?) }
+	</select>
+	
+<!-- 	prueba CANVIA -->
+	
+<!-- 	<resultMap id="AreaBean2Map" type="AreaBean"> -->
+<!-- 		<id property="codArea" column="NCODAREA" /> -->
+<!-- 	</resultMap> -->
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="idArea"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  	jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="AreaBeanMap"/>
+    </parameterMap> 
+	
+	<select id="obtenerAreaXCodigo" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_AREA_COD(?,?) }
+	</select>
+	
+</mapper>

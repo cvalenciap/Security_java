@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.SistemaModuloFormMBDAO">
+   	    	    
+   	<resultMap id="SistemaModuloFormMap" type="SistemaModuloFormBean">
+   		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="codModulo"				column="NCODMODULO"/>
+ 		<result property="codFormulario"				column="NCODFORMULARIO"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="codFormularioPadre"				column="NCODFORMULARIO_PADRE"/>
+ 		<result property="nivelFormulario"				column="NNIVEL_FORMULARIO"/>
+ 		<result property="ordenFormulario"				column="NORDEN_FORMULARIO"/>
+ 		<result property="urlFormulario"				column="VURL_FORMULARIO"/>
+ 		<result property="estadoNombre"				column="VESTADONOMBRE"/>
+ 		<result property="sistemaNombre"				column="VSISTEMANOMBRE"/>
+ 		<result property="moduloNombre"				column="VMODULONOMBRE"/>
+ 		<result property="usuarioCreacion"				column="VRESCRE"/>
+ 		<result property="fechaCreacion"				column="DFECCRE"/>
+ 		<result property="usuarioModificacion"				column="VRESACT"/>
+ 		<result property="fechaModificacion"				column="DFECACT"/>
+ 		<result property="nombreEstado"		column="NOMBREESTADO"/>
+    </resultMap>
+    
+    <resultMap id="SistemaModuloOpcionMap" type="SistemaModuloOpcionBean">
+   		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="codModulo"				column="NCODMODULO"/>
+ 		<result property="codFormulario"				column="NCODFORMULARIO"/>
+ 		<result property="descripcion"				column="VDESCRIPCION"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="codFormularioPadre"				column="NCODFORMULARIO_PADRE"/>
+ 		<result property="nivelFormulario"				column="NNIVEL_FORMULARIO"/>
+ 		<result property="ordenFormulario"				column="NORDEN_FORMULARIO"/>
+ 		<result property="urlFormulario"				column="VURL_FORMULARIO"/>
+ 		<result property="estadoNombre"				column="VESTADONOMBRE"/>
+ 		<result property="sistemaNombre"				column="VSISTEMANOMBRE"/>
+ 		<result property="moduloNombre"				column="VMODULONOMBRE"/>
+ 		<result property="codPerfil"				column="NCODPERFIL"/>
+ 		<result property="perfilNombre"				column="VDESCRIPCION"/>
+ 		<result property="codModulo"				column="NCODMODULO"/>
+ 		<result property="nombreEstado"		column="NOMBREESTADO"/>
+    </resultMap> 
+     	    
+    <parameterMap id="parametrosBusqueda" type="java.util.Map">
+    	<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codModulo"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloFormMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormPorCodigo" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_FORM(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+    	<parameter property="parametro"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloFormMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormInicioPorCodigo" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_INICIO(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosDetalle2" type="java.util.Map">
+    	<parameter property="parametro"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloOpcionMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormInicioPorCodigov2" statementType="CALLABLE" parameterMap="parametrosDetalle2" >
+<!-- 		inicio adecuacion seguridad2 -->
+<!-- 		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MOD_INICIO_COD(?,?,?) } -->
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MOD_INICIO_COD2(?,?,?) }
+<!-- 		fin adecuacion seguridad2 -->
+	</select>
+	
+	<parameterMap id="parametrosCodigo" type="java.util.Map">
+    	<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codModulo"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codFormulario"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloFormMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerSistemaModuloFormPorCodigo" statementType="CALLABLE" parameterMap="parametrosCodigo" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_FORM_COD(?,?,?,?) }
+	</select>
+	
+	<insert id="grabarSistemaModuloForm" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_NUEVO_SIS_MODULO_FORM(
+			#{codSistema}
+		    ,#{codModulo}
+		    ,#{codFormulario}
+		    ,#{descripcion}
+		    ,#{estado}
+		    ,#{codFormularioPadre}
+		    ,#{nivelFormulario}
+		    ,#{ordenFormulario}
+		    ,#{urlFormulario}
+		    ,#{usuarioCreacion}
+		    ,#{identity, javaType=java.lang.Integer, jdbcType=NUMERIC, mode=OUT}
+		)}
+    </insert>
+	
+	<update id="actualizarSistemaModuloForm" parameterType="sistemaModuloFormBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_SIS_MODULO_FORM(
+			#{codSistema}
+		    ,#{codModulo}
+		    ,#{codFormulario}
+		    ,#{descripcion}
+		    ,#{estado}
+		    ,#{codFormularioPadre}
+		    ,#{nivelFormulario}
+		    ,#{ordenFormulario}
+		    ,#{urlFormulario}
+		    ,#{usuarioModificacion}
+		)}
+    </update>
+    
+    <update id="actualizarEstadoSistemaModuloForm" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_SIS_MODULO_FORM_EST(
+			#{codSistema}
+		    ,#{codModulo}
+		    ,#{codFormulario}
+		    ,#{estado}
+		    ,#{usuario}
+		)}
+    </update>
+	
+	<parameterMap id="parametrosPaginaTotal" type="java.util.Map">
+    	<parameter property="tipoBusqueda"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="valorBusqueda"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="P_TotalReg"  jdbcType="NUMERIC"	javaType="java.lang.Integer"	mode="OUT"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormPaginarTotal" statementType="CALLABLE" parameterMap="parametrosPaginaTotal" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_FORM_TOT(?,?,?) }
+	</select>
+    
+    <parameterMap id="parametrosPaginar" type="java.util.Map">
+    	<parameter property="pageSize"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="pageIndex"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="tipoBusqueda"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="valorBusqueda"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+    	<parameter property="sortColumn"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloFormMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormPaginar" statementType="CALLABLE" parameterMap="parametrosPaginar" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_FORM_PAG(?,?,?,?,?,?) }
+	</select>
+    
+	<parameterMap id="parametrosCodigoHijo" type="java.util.Map">
+    	<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codModulo"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+    	<parameter property="codFormulario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloFormMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerSistemaModuloFormPorCodigoHijos" statementType="CALLABLE" parameterMap="parametrosCodigoHijo" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_SIS_MODULO_HIJOS(?,?,?,?) }
+	</select>
+	
+<!-- 	inicio adecuacion seguridad2 -->
+	<parameterMap id="parametrosDetalleLista" type="java.util.Map">
+    	<parameter property="codSistema"	jdbcType="NUMERIC"	mode="IN" />
+    	<parameter property="codUsuario"	jdbcType="VARCHAR"	mode="IN" />
+    	<parameter property="codPerfil"		jdbcType="NUMERIC"	mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="SistemaModuloOpcionMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoSistemaModuloFormInicioPorCodigoAct" statementType="CALLABLE" parameterMap="parametrosDetalleLista" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_SIS_MOD_INICIO_COD(?,?,?,?) }
+	</select>
+	
+	<select id="obtenerListadoSistemaModuloFormInicioPorCodigoLDAP" statementType="CALLABLE" parameterMap="parametrosDetalleLista" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_SIS_MOD_INICIO_LDAP(?,?,?,?) }
+	</select>
+	
+<!-- 	fin adecuacion seguridad2 -->
+		
+</mapper>

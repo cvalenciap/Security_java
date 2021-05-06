@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- #Proyecto: Nuevo Sistema de Seguridad de Sedapal. #Fecha Creación: 27/12/2016. 
+	#Autor: Luis Castro Valdez. #Empresa: Tgestiona. -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+
+	
+		<display-name>webserviceserguridad</display-name>
+
+		<servlet>
+			<servlet-name>seguridadws-servlet</servlet-name>
+			<servlet-class>
+				com.sun.xml.ws.transport.http.servlet.WSSpringServlet
+			</servlet-class>
+		</servlet>
+
+		<servlet-mapping>
+			<servlet-name>seguridadws-servlet</servlet-name>
+			<url-pattern>/seguridadws</url-pattern>
+		</servlet-mapping>
+		
+		<servlet>
+			<servlet-name>powerws-servlet</servlet-name>
+			<servlet-class>
+				com.sun.xml.ws.transport.http.servlet.WSSpringServlet
+			</servlet-class>
+		</servlet>
+
+		<servlet-mapping>
+			<servlet-name>powerws-servlet</servlet-name>
+			<url-pattern>/powerws</url-pattern>
+		</servlet-mapping>
+
+		<listener>
+			<listener-class>
+				org.springframework.web.context.ContextLoaderListener
+			</listener-class>
+		</listener>
+		
+		<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/applicationContext.xml
+		</param-value>
+	</context-param>
+	
+		<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
+	
+</web-app>

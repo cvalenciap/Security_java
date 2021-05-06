@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.UsuarioMBDAO">
+	
+	<resultMap id="UsuarioMap" type="UsuarioBean">
+   		<result property="codUsuario"			column="VCODUSUARIO"/>
+ 		<result property="descripcion"			column="VDESCRIPCION"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="codArea"				column="NCODAREA"/>
+ 		<result property="fecCreacion"			column="DFECCREACION"/>
+ 		<result property="fecActualizacion"		column="DFECACTUALIZACION"/>
+ 		<result property="responsable"			column="VRESPONSABLE"/>
+ 		<result property="zona"					column="VZONA"/>
+ 		<result property="codFicha"				column="NCODFICHA"/>
+ 		<result property="indicador"			column="NINDICADOR"/>
+ 		<result property="pass"					column="VPASS"/>
+ 		<result property="fecUltver"			column="DFECULTVER"/>
+ 		<result property="decClave"				column="DFECCLAVE"/>
+ 		<result property="conexion"				column="NCONEXION"/>
+ 		<result property="sustentacion"			column="VSUSTENTACION"/>
+ 		<result property="doc"					column="VDOC"/>
+ 		<result property="nroIntentos"			column="NUMERO_INTENTOS"/>
+ 		<result property="fechaInicioVigencia"	column="DFEC_INICIO_VIGENCIA"/>
+ 		<result property="fechaFinVigencia"		column="DFEC_FIN_VIGENCIA"/>
+ 		<result property="flagCambiarClave"		column="VFLAG_CAMBIAR_CLAVE"/>
+ 		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="codPerfil"			column="NCODPERFIL"/>
+ 		<result property="rutaOU"				column="PATH_LDAP"/>
+ 		<result property="codUsuarioLDAP"		column="VCODUSERLDAP"/>
+<!--  		add campos externos -->
+ 		<result property="codTipo"				column="N_FLG_TIPO_USUARIO"/>
+ 		<result property="codEmpresa"			column="N_ID_CONTRATISTA"/>
+ 		<result property="nombreExterno"		column="V_DES_TRABAJADOR"/>
+ 		<result property="dniExterno"			column="V_DES_NRO_DNI"/>
+ 		<result property="emailExterno"			column="V_DES_EMAIL"/>
+ 		<result property="flagBloqueo"			column="N_FLG_BLOQUEO"/>
+    </resultMap>   	    	 
+   	    	 
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioMap"/>
+    </parameterMap>
+    
+    <parameterMap id="parametrosLista" type="java.util.Map">
+		<parameter property="codUsuario"		jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="PAR_OUT_CURSOR"  	jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerUsuarioPorCodUsuario" statementType="CALLABLE" parameterMap="parametrosLista" >
+<!-- 		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_POR_USUARIO(?,?) } -->
+		{ CALL PKG_SEG_USUARIOS.PRC_GET_USER_PERF_SIST_X_COD(?,?) }
+	</select>   	    	 
+   	    	 
+	<parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerListadoUsuario" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO(?) }
+	</select>   	    	 
+
+	<update id="actualizarUsuarioEstadoPorCodUsuario" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_USUARIO_ESTADO(
+			#{codUsuario}
+		    ,#{estado}
+		    ,#{usuario}
+		    ,#{codSistema}
+		)}
+    </update>
+    
+    <update id="bloqueoUsuarioEstadoPorCodUsuario" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_USUARIO_BLOQUEADO(
+			#{codUsuario}
+		    ,#{estado}
+		    ,#{nrointentos}
+		    ,#{usuario}
+		    ,#{codSistema}
+		)}
+    </update>   	    	 
+
+	<update id="actualizarUsuarioClavesErroneas" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_USUARIO_INTENTOS(
+			#{codUsuario}
+		    ,#{nroIntentos}
+		)}
+    </update>   	    	 
+   	    	 
+	<insert id="grabarUsuario" parameterType="usuarioBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD.SP_NUEVO_USUARIO(
+        	#{codUsuario}
+		    ,#{descripcion}
+		    ,#{estado}
+		    ,#{codArea}
+		    ,#{responsable}
+		    ,#{zona}
+		    ,#{codFicha}
+		    ,#{indicador}
+		    ,#{pass}
+		    ,#{conexion}
+		    ,#{sustentacion}
+		    ,#{doc}
+		    ,#{flagCambiarClave}
+		    ,#{codSistema}
+		    ,#{codPerfil}
+        ) }
+    </insert>   	    	 
+
+	<update id="actualizarUsuario" parameterType="usuarioBean" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_UPDATE_USUARIO(
+			#{codUsuario}
+		    ,#{descripcion}
+		    ,#{estado}
+		    ,#{codArea}
+		    ,#{responsable}
+		    ,#{zona}
+		    ,#{codFicha}
+		    ,#{indicador}
+		    ,#{pass}
+		    ,#{conexion}
+		    ,#{sustentacion}
+		    ,#{doc}
+		    ,#{flagCambiarClave}
+		    ,#{codSistema}
+		    ,#{codPerfil}
+		)}
+    </update>   	    	 
+   	    	 
+	<parameterMap id="parametrosUsuarioCod" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="codSistema"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="pCursor"  jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="UsuarioMap"/>
+    </parameterMap> 
+		
+	<select id="obtenerUsuarioPorCodUsuarioCodSistema" statementType="CALLABLE" parameterMap="parametrosUsuarioCod" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_USUARIO_SISTEMA_ID(?,?,?) }
+	</select>   	    	 
+   	    
+<!-- 	inicio adecuacion seguridad2   	     -->
+	<select id="obtenerUsuarioPorCodUsuarioAct" statementType="CALLABLE" parameterMap="parametrosLista" >
+<!-- 		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUARIO_POR_USUARIO(?,?) } -->
+		{ CALL PKG_SEG_USUARIOS.PRC_OBTENER_USUARIO_X_COD(?,?) }
+	</select>
+	
+	<update id="bloqueoUsuarioEstadoPorCodUsuarioAct" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD_N.SP_UPDATE_USUARIO_BLOQUEADO(
+			#{codUsuario}
+		    ,#{estado}
+		    ,#{nrointentos}
+		    ,#{usuario}
+		)}
+    </update>
+	
+	<update id="actualizarUsuarioAct" parameterType="usuarioBean" statementType="CALLABLE">
+<!-- 		{CALL PKG_SEGURIDAD_N.SP_UPDATE_USUARIO( -->
+		{CALL PKG_SEG_USUARIOS.PRC_ACTUALIZAR_USUARIO(
+			#{codUsuario}
+		    ,#{descripcion}
+		    ,#{estado}
+		    ,#{codArea}
+		    ,#{responsable}
+		    ,#{zona}
+		    ,#{codFicha}
+		    ,#{indicador}
+		    ,#{pass}
+		    ,#{conexion}
+		    ,#{sustentacion}
+		    ,#{doc}
+		    ,#{flagCambiarClave}
+<!-- 		    add campos externos -->
+		    ,#{codTipo}
+		    ,#{codEmpresa}
+		    ,#{nombreExterno}
+		    ,#{dniExterno}
+		    ,#{emailExterno}
+		    ,#{flagBloqueo}
+		)}
+    </update>
+	
+	<insert id="grabarUsuarioAct" parameterType="usuarioBean" statementType="CALLABLE">
+<!--         { CALL PKG_SEGURIDAD_N.SP_NUEVO_USUARIO( -->
+		{ CALL PKG_SEG_USUARIOS.PRC_REGISTRAR_USUARIO(
+        	#{codUsuario}
+		    ,#{descripcion}
+		    ,#{estado}
+		    ,#{codArea}
+		    ,#{responsable}
+		    ,#{zona}
+		    ,#{codFicha}
+		    ,#{indicador}
+		    ,#{pass}
+		    ,#{conexion}
+		    ,#{sustentacion}
+		    ,#{doc}
+		    ,#{flagCambiarClave}
+<!-- 		    add campos externos -->
+		    ,#{codTipo}
+		    ,#{codEmpresa}
+		    ,#{nombreExterno}
+		    ,#{dniExterno}
+		    ,#{emailExterno}
+		    ,#{flagBloqueo}
+        ) }
+    </insert>
+	
+	<update id="actualizarUsuarioEstadoPorCodUsuarioAct" parameterType="Map" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD_N.SP_UPDATE_USUARIO_ESTADO(
+			#{codUsuario}
+		    ,#{estado}
+		    ,#{usuario}
+		)}
+    </update>
+			
+	<select id="obtenerUsuarioPorCodUsuarioLDAP" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USUARIO_LDAP(?,?) }
+	</select>
+	
+	<select id="obtenerUsuarioPorCodUsuarioCodSistemaLDAP" statementType="CALLABLE" parameterMap="parametrosUsuarioCod" >
+		{ CALL PKG_SEGURIDAD_N.SP_OBTENER_USER_LDAP_SIST_ID(?,?,?) }
+	</select>
+	
+	<insert id="grabarUsuarioLDAP" parameterType="usuarioBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD_N.SP_NUEVO_USUARIO_LDAP(
+        	#{codUsuarioLDAP}
+        ) }
+    </insert> 
+<!-- 	fin adecuacion seguridad2 -->
+	
+	<parameterMap id="parametrosValidExterno" type="java.util.Map">
+		<parameter property="PAR_VCODUSUARIO"		jdbcType="VARCHAR"	javaType="java.lang.String"			mode="IN" />
+		<parameter property="PAR_N_ID_CONTRATISTA"	jdbcType="NUMERIC"	javaType="java.lang.Integer"		mode="IN" />
+		<parameter property="PAR_V_DES_NRO_DNI"		jdbcType="VARCHAR"	javaType="java.lang.String"			mode="IN" />
+		<parameter property="PAR_OUT_CURSOR"  		jdbcType="CURSOR"	javaType="java.sql.ResultSet"		mode="OUT"	resultMap="UsuarioMap"/>
+    </parameterMap>
+	
+	<select id="validacionUsuarioExterno" statementType="CALLABLE" parameterMap="parametrosValidExterno" >
+		{ CALL PKG_SEG_USUARIOS.PRC_VALIDAR_USUARIO_EXTERNO(?,?,?,?) }
+	</select> 
+   	    	     	
+</mapper>

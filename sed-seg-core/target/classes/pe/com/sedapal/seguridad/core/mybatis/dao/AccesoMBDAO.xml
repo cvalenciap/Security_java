@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.com.sedapal.seguridad.core.mybatis.dao.AccesoMBDAO">
+   	 
+   	<resultMap id="AccesoBeanMap" type="AccesoBean">
+ 		<result property="codSistema"			column="NCODSISTEMA"/>
+ 		<result property="codUsuario"			column="VCODUSUARIO"/>
+ 		<result property="fecFecha"				column="DFECFECHA"/>
+ 		<result property="codIp"				column="NCODIP"/>
+ 		<result property="codArea"				column="NCODAREA"/>
+ 		<result property="codAcceso"			column="VCODACCESO"/>
+ 		<result property="codIngreso"			column="VCODINGRESO"/>
+ 		<result property="correlativo"			column="NCORRELATIVO"/>
+ 		<result property="estado"				column="NESTADO"/>
+ 		<result property="usuarioCreacion"		column="VRESCRE"/>
+ 		<result property="fechaCreacion"		column="DFECCRE"/>
+ 		<result property="usuarioModificacion"	column="VRESACT"/>
+ 		<result property="fechaModificacion"	column="DFECACT"/>
+ 		<result property="token"				column="VTOKEN"/>
+    </resultMap>
+   	    	    
+   	<insert id="grabarAcceso" parameterType="accesoBean" statementType="CALLABLE">
+        { CALL PKG_SEGURIDAD.SP_NUEVO_ACCESO(
+        	#{codUsuario}
+		    ,#{codIp}
+		    ,#{codArea}
+		    ,#{codAcceso}
+		    ,#{codIngreso}
+		    ,#{correlativo}
+		    ,#{estado}
+		    ,#{token}  
+        ) }
+    </insert> 
+		
+	<parameterMap id="parametrosDetalle" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="codIp"			jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  		jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="AccesoBeanMap"/>
+    </parameterMap> 
+	
+	<select id="obtenerAccesoSistema" statementType="CALLABLE" parameterMap="parametrosDetalle" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_ACCESO_SISTEMA(?,?,?) }
+	</select>
+	
+	<parameterMap id="parametrosBusqueda" type="java.util.Map">
+		<parameter property="codUsuario"	jdbcType="VARCHAR"	javaType="java.lang.String"		mode="IN" />
+		<parameter property="pCursor"  		jdbcType="CURSOR"	javaType="java.sql.ResultSet"	mode="OUT"	resultMap="AccesoBeanMap"/>
+    </parameterMap> 
+	
+	<select id="obtenerUltimoAccesoSistema" statementType="CALLABLE" parameterMap="parametrosBusqueda" >
+		{ CALL PKG_SEGURIDAD.SP_OBTENER_ULTIMO_ACCESO(?,?) }
+	</select>
+	
+	<update id="actualizarAcceso" parameterType="String" statementType="CALLABLE">
+		{CALL PKG_SEGURIDAD.SP_INVALIDAR_ACCESO(
+			#{token}
+		)}
+    </update>
+	
+</mapper>
